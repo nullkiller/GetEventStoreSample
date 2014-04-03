@@ -1,6 +1,7 @@
 ﻿using EventStore.Commands.User;
 using EventStore.Domain;
 using EventStore.Domain.CommandHandlers;
+using EventStore.Domain.Core;
 using EventStore.Infrastructure.DataAccess;
 using EventStore.Messages.UserEvents;
 using EventStore.ReadModel;
@@ -20,7 +21,7 @@ namespace EventStore.Web.Controllers
         public CommandHandler<CreateNewUserCommand> CreateNewUserHandler { get; set; }
 
         [Inject]
-        public IReadRepository DataRepository { get; set; }
+        public IRepository DataRepository { get; set; }
 
         public ActionResult Create()
         {

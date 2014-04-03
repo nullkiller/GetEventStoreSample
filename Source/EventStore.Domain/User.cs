@@ -1,4 +1,4 @@
-﻿using CommonDomain.Core;
+﻿using EventStore.Domain.Core.CommonDomain.Core;
 using EventStore.Messages.UserEvents;
 using System;
 using System.Collections.Generic;

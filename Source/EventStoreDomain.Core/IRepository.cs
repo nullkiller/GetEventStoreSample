@@ -1,18 +1,17 @@
-﻿using CommonDomain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventStore.Infrastructure.DataAccess
+namespace EventStore.Domain.Core
 {
-    public interface IReadRepository
+    public interface IRepository
     {
         IQueryable<T> GetAll<T>() where T : class, IAggregate;
 
         T GetById<T>(Guid id) where T : class, IAggregate;
 
-        void Load();
+        void Save(IAggregate aggregate, Guid commitId);
     }
 }

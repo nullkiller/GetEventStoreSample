@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{846F8B52-826A-47B8-A990-ABC41A0C916E}</ProjectGuid>
+    <ProjectGuid>{98E903FB-F377-4739-BF65-6EB804437D27}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EventStore.Infrastructure</RootNamespace>
-    <AssemblyName>EventStore.Infrastructure</AssemblyName>
+    <RootNamespace>EventStore.Domain.Test</RootNamespace>
+    <AssemblyName>EventStore.Domain.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -32,50 +32,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EventStore.ClientAPI">
-      <HintPath>..\packages\EventStore.Client.2.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.2.2.0.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\AggregateDeletedException.cs" />
-    <Compile Include="DataAccess\AggregateNotFoundException.cs" />
-    <Compile Include="DataAccess\AggregateVersionException.cs" />
-    <Compile Include="DataAccess\StoreRepository.cs" />
-    <Compile Include="DataAccess\StoreNotFoundException.cs" />
-    <Compile Include="Events\InProcessServiceBus.cs" />
-    <Compile Include="Events\IServiceBus.cs" />
-    <Compile Include="InfrastructureModule.cs" />
-    <Compile Include="Ninject\NinjectResolver.cs" />
-    <Compile Include="Ninject\NinjectScope.cs" />
+    <Compile Include="UserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceBusModule.cs" />
-    <Compile Include="Store\GetEventStore.cs" />
-    <Compile Include="Store\IStoreSettings.cs" />
-    <Compile Include="Store\StoreSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EventStore.Commands\EventStore.Commands.csproj">
-      <Project>{f5d83841-9884-4d15-8eec-35554bfa471a}</Project>
-      <Name>EventStore.Commands</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EventStore.Domain\EventStore.Domain.csproj">
       <Project>{624453e0-f3a8-4a02-a05e-1de54214f7e2}</Project>
       <Name>EventStore.Domain</Name>

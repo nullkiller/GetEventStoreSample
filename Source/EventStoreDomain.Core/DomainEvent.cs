@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventStore.Messages
+namespace EventStore.Domain.Core
 {
 	/// <summary>
 	/// Denotes an event in the domain model.

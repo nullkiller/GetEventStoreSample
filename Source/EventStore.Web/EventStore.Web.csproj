@@ -41,10 +41,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonDomain, Version=1.6.0.0, Culture=neutral, PublicKeyToken=ec37a15dc44010cd, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CommonDomain.1.6.0.3\lib\net40\CommonDomain.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -331,6 +327,10 @@
     <ProjectReference Include="..\EventStore.ReadModel\EventStore.ReadModel.csproj">
       <Project>{6eae0058-be1f-47e1-9f08-2e6e5f146027}</Project>
       <Name>EventStore.ReadModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventStoreDomain.Core\EventStore.Domain.Core.csproj">
+      <Project>{06aafbfe-0671-4c95-b01e-c92b80aba439}</Project>
+      <Name>EventStore.Domain.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

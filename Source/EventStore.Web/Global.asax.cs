@@ -1,5 +1,7 @@
-﻿using EventStore.Infrastructure.DataAccess;
+﻿using EventStore.Domain.Core;
+using EventStore.Infrastructure.DataAccess;
 using EventStore.Infrastructure.Ninject;
+using EventStore.Infrastructure.Store;
 using EventStore.Web.Ioc;
 using Ninject;
 using System;
@@ -19,7 +21,7 @@ namespace EventStore.Web
     public class WebApiApplication : Ninject.Web.Common.NinjectHttpApplication
     {
         [Inject]
-        public IReadRepository ReadRepository { get; set; }
+        public IEventStore Store { get; set; }
 
         protected override void OnApplicationStarted()
         {
@@ -34,12 +36,12 @@ namespace EventStore.Web
 
             GlobalConfiguration.Configuration.DependencyResolver = Bootstrapper.Instance.DependencyResolver;
 
-            ReadRepository.Load();
+            Store.FetchAllEvents();
         }
 
         protected override global::Ninject.IKernel CreateKernel()
         {
-            ReadRepository = Bootstrapper.Instance.Get<IReadRepository>();
+            Store = Bootstrapper.Instance.Get<IEventStore>();
 
             return Bootstrapper.Instance.Kernel;
         }

@@ -1,8 +1,10 @@
-﻿using CommonDomain.Persistence;
-using EventStore.ClientAPI;
+﻿using EventStore.ClientAPI;
 using EventStore.Domain;
 using EventStore.Domain.CommandHandlers;
+using EventStore.Domain.Core;
 using EventStore.Infrastructure.DataAccess;
+using EventStore.Infrastructure.Events;
+using EventStore.Infrastructure.Store;
 using Ninject.Modules;
 using System;
 using System.Collections.Generic;
@@ -17,11 +19,10 @@ namespace EventStore.Infrastructure
     {
         public override void Load()
         {
-            var ip = new IPEndPoint(new IPAddress(new byte[]{127, 0, 0, 1}), 1113);
-
-            Bind<IEventStoreConnection>().ToMethod(context => EventStoreConnection.Create(ip));
-            Bind<IRepository>().To<GetEventStoreRepository>();
-            Bind<IReadRepository>().To<GetEventStoreRepository>();
+            Bind<IStoreSettings>().To<StoreSettings>();
+            Bind<IServiceBus>().To<InProcessServiceBus>();
+            Bind<IEventStore>().To<GetEventStore>();
+            Bind<IRepository>().To<StoreRepository>();
 
             RegisterHandlers();
         }

@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{03904C6C-B092-4CE7-90DA-9526F3A01890}</ProjectGuid>
+    <ProjectGuid>{06AAFBFE-0671-4C95-B01E-C92B80ABA439}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EventStore.Messages</RootNamespace>
-    <AssemblyName>EventStore.Messages</AssemblyName>
+    <RootNamespace>EventStore.Domain.Core</RootNamespace>
+    <AssemblyName>EventStore.Domain.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,16 +22,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -44,14 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateBase.cs" />
+    <Compile Include="CommandHandler.cs" />
+    <Compile Include="ConventionEventRouter.cs" />
+    <Compile Include="DomainEvent.cs" />
+    <Compile Include="EventHandler.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="HandlerForDomainEventNotFoundException.cs" />
+    <Compile Include="IAggregate.cs" />
+    <Compile Include="IEventstore.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="IRouteEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserEvents\Created.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EventStoreDomain.Core\EventStore.Domain.Core.csproj">
-      <Project>{06aafbfe-0671-4c95-b01e-c92b80aba439}</Project>
-      <Name>EventStore.Domain.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

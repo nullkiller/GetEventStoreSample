@@ -37,9 +37,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonDomain">
-      <HintPath>..\packages\CommonDomain.1.6.0.3\lib\net40\CommonDomain.dll</HintPath>
-    </Reference>
     <Reference Include="EventStore.ClientAPI">
       <HintPath>..\packages\EventStore.Client.2.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>
     </Reference>
@@ -55,8 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandHandlers\CommandHandler.cs" />
     <Compile Include="CommandHandlers\UserCommandHandler.cs" />
+    <Compile Include="CommandModule.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -71,6 +68,10 @@
     <ProjectReference Include="..\EventStore.Messages\EventStore.Messages.csproj">
       <Project>{03904c6c-b092-4ce7-90da-9526f3a01890}</Project>
       <Name>EventStore.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventStoreDomain.Core\EventStore.Domain.Core.csproj">
+      <Project>{06aafbfe-0671-4c95-b01e-c92b80aba439}</Project>
+      <Name>EventStore.Domain.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

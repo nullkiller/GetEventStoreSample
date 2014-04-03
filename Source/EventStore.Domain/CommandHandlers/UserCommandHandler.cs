@@ -1,5 +1,5 @@
-﻿using CommonDomain.Persistence;
-using EventStore.Commands.User;
+﻿using EventStore.Commands.User;
+using EventStore.Domain.Core;
 using Ninject;
 using System;
 using System.Collections.Generic;
