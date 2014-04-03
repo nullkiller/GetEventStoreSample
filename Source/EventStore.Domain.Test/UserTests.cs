@@ -6,48 +6,30 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
+using EventStore.Tests.Arrange;
 
-namespace EventStore.Domain.Test
+namespace EventStore.Domain.Tests
 {
     public class UserTests
     {
-        private const string TestLogin = "test";
-        private const string TestPassword = "test";
 
         [Fact]
         public void user_shold_apply_to_create_event()
         {
             var user = new User();
-            var created = ArrangeCreated();
+            var created = UserEvents.ArrangeCreated();
 
             user.Apply(created);
 
-            AssertUserCreated(user);
+            UserEvents.AssertUserCreated(user);
         }
 
         [Fact]
         public void user_should_be_creatable()
         {
-            var user = User.CreateUser(TestLogin, TestPassword);
+            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword);
 
-            AssertUserCreated(user);
+            UserEvents.AssertUserCreated(user);
         }
-
-        private static void AssertUserCreated(User user)
-        {
-
-            user.Login.Should().Be(TestLogin);
-            user.Password.Should().Be(TestPassword);
-            user.Id.Should().NotBe(Guid.Empty);
-        }
-
-        #region arranges
-
-        private Created ArrangeCreated()
-        {
-            return new Created(TestLogin, TestPassword);
-        }
-
-        #endregion
     }
 }

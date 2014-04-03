@@ -14,12 +14,11 @@ using EventStore.Infrastructure.Store;
 
 namespace EventStore.Infrastructure.DataAccess
 {
-     
     public class StoreRepository : IRepository, IEventHandler<DomainEvent>
     {
-        private static Dictionary<Guid, IAggregate> _all;
         private static Dictionary<Type, Func<IAggregate>> factoryMethods;
         private IEventStore _eventStore;
+        private IRepositoryCache _cache;
 
         static StoreRepository()
         {
@@ -27,42 +26,23 @@ namespace EventStore.Infrastructure.DataAccess
             {
                 { typeof(EventStore.Messages.UserEvents.Created), () => new User() }
             };
-
-            _all = new Dictionary<Guid, IAggregate>();
         }
 
-        public StoreRepository(IEventStore eventStore)
+        public StoreRepository(IEventStore eventStore, IRepositoryCache cache)
         {
             _eventStore = eventStore;
+            _cache = cache;
         }
 
         public TAggregate GetById<TAggregate>(Guid id) where TAggregate : class, IAggregate
         {
-            return (TAggregate)_all[id];
+            return (TAggregate)_cache.Get(id);
         }
                 
-        public void Handle(DomainEvent @event)
+        void IEventHandler<DomainEvent>.Handle(DomainEvent @event)
         {
-            var aggregate = GetOrAdd(@event.AggregateId, factoryMethods[@event.GetType()]);
+            var aggregate = _cache.GetOrAdd(@event.AggregateId, factoryMethods[@event.GetType()]);
             aggregate.ApplyEvent(@event);
-        }
-
-        private IAggregate GetOrAdd(Guid aggregateId, Func<IAggregate> aggregateFactory)
-        {
-            IAggregate existingAggregate;
-
-            if (!_all.TryGetValue(aggregateId, out existingAggregate))
-            {
-                existingAggregate = aggregateFactory();
-                _all.Add(aggregateId, existingAggregate);
-            }
-
-            return existingAggregate;
-        }
-
-        public TAggregate GetById<TAggregate>(Guid id, int version) where TAggregate : class, IAggregate
-        {
-            throw new NotImplementedException();
         }
 
         public void Save(IAggregate aggregate, Guid commitId)
@@ -71,7 +51,7 @@ namespace EventStore.Infrastructure.DataAccess
 
             _eventStore.SaveEvents(aggregate, newEvents, commitId);
 
-            GetOrAdd(aggregate.Id, () => aggregate);
+            _cache.GetOrAdd(aggregate.Id, () => aggregate);
             
             aggregate.ClearUncommittedEvents();
         }
@@ -79,7 +59,7 @@ namespace EventStore.Infrastructure.DataAccess
         public IQueryable<T> GetAll<T>()
              where T : class, IAggregate
         {
-            return _all.Values.OfType<T>().AsQueryable();
+            return _cache.GetAll().OfType<T>().AsQueryable();
         }
     }
 }

@@ -19,6 +19,7 @@ namespace EventStore.Infrastructure
     {
         public override void Load()
         {
+            Bind<IRepositoryCache>().To<RepositoryCache>().InSingletonScope();
             Bind<IStoreSettings>().To<StoreSettings>();
             Bind<IServiceBus>().To<InProcessServiceBus>();
             Bind<IEventStore>().To<GetEventStore>();

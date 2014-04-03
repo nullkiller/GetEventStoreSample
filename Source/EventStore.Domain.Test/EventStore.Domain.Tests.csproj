@@ -7,8 +7,8 @@
     <ProjectGuid>{98E903FB-F377-4739-BF65-6EB804437D27}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EventStore.Domain.Test</RootNamespace>
-    <AssemblyName>EventStore.Domain.Test</AssemblyName>
+    <RootNamespace>EventStore.Domain.Tests</RootNamespace>
+    <AssemblyName>EventStore.Domain.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -61,6 +61,10 @@
     <ProjectReference Include="..\EventStore.Messages\EventStore.Messages.csproj">
       <Project>{03904c6c-b092-4ce7-90da-9526f3a01890}</Project>
       <Name>EventStore.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventStore.Tests.Arrange\EventStore.Tests.Arrange.csproj">
+      <Project>{e9723395-8cbd-4844-9b7f-e6b824928a88}</Project>
+      <Name>EventStore.Tests.Arrange</Name>
     </ProjectReference>
     <ProjectReference Include="..\EventStoreDomain.Core\EventStore.Domain.Core.csproj">
       <Project>{06aafbfe-0671-4c95-b01e-c92b80aba439}</Project>
