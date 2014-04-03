@@ -56,5 +56,25 @@ namespace EventStore.Infrastructure.Tests
             UserEvents.AssertUserCreated(users[0]);
             users[0].Id.Should().NotBe(users[1].Id);
         }
+
+        [Fact]
+        public void repository_should_save_user()
+        {
+            var eventStore = Substitute.For<IEventStore>();
+            var cache = new RepositoryCache();
+            
+            StoreRepository repository = new StoreRepository(eventStore, cache);
+
+            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword);
+            repository.Save(user, Guid.NewGuid());
+
+            cache.Get(user.Id).Should().Be(user);
+            var saveEventsCall = eventStore.ReceivedCalls().First();
+            var eventsToSave = saveEventsCall.GetArguments()[1].As<IEnumerable<DomainEvent>>();
+            var userCreated = eventsToSave.First().As<EventStore.Messages.UserEvents.Created>();
+            
+            userCreated.Should().NotBeNull();
+            userCreated.Login.Should().Be(UserEvents.TestLogin);
+        }
     }
 }

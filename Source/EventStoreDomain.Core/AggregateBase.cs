@@ -66,7 +66,7 @@ namespace EventStore.Domain.Core
             }
             ICollection<DomainEvent> IAggregate.GetUncommittedEvents()
             {
-                return this.uncommittedEvents;
+                return this.uncommittedEvents.ToList();
             }
             void IAggregate.ClearUncommittedEvents()
             {

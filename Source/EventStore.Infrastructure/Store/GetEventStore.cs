@@ -79,7 +79,7 @@ namespace EventStore.Infrastructure.Store
             }
         }
 
-        public void SaveEvents(IAggregate aggregate, List<object> newEvents, Guid commitId)
+        public void SaveEvents(IAggregate aggregate, IEnumerable<DomainEvent> newEvents, Guid commitId)
         {
             var commitHeaders = new Dictionary<string, object>
             {

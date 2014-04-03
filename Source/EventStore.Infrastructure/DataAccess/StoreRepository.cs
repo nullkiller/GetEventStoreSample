@@ -47,7 +47,7 @@ namespace EventStore.Infrastructure.DataAccess
 
         public void Save(IAggregate aggregate, Guid commitId)
         {
-            var newEvents = aggregate.GetUncommittedEvents().Cast<object>().ToList();
+            var newEvents = aggregate.GetUncommittedEvents();
 
             _eventStore.SaveEvents(aggregate, newEvents, commitId);
 
