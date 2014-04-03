@@ -1,0 +1,13 @@
+﻿@model EventStore.ReadModel.UserDto
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Login</h2>
+
+<form method="post" action="">
+	@Html.TextBoxFor(m => m.Login)
+	@Html.PasswordFor(m => m.Login)
+
+	<input type="submit" value="Login" />
+</form>
