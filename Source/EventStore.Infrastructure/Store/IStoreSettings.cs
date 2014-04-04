@@ -6,8 +6,8 @@ using System.Text;
 
 namespace EventStore.Infrastructure.Store
 {
-    public interface IStoreSettings
+    public interface IStoreSettings<T>
     {
-        IEventStoreConnection GetConnection();
+        T GetConnection();
     }
 }

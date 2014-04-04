@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EventStore.Infrastructure.Store
 {
-    public class StoreSettings : IStoreSettings
+    public class StoreSettings : IStoreSettings<IEventStoreConnection>
     {
         public IEventStoreConnection GetConnection()
         {

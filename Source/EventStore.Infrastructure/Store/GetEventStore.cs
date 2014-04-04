@@ -20,7 +20,7 @@ namespace EventStore.Infrastructure.Store
         private const int WritePageSize = 500;
         private const int ReadPageSize = 500;
 
-        private readonly IStoreSettings _eventStoreSettings;
+        private readonly IStoreSettings<IEventStoreConnection> _eventStoreSettings;
         private static readonly JsonSerializerSettings SerializerSettings;
         private static int originalVersion;
         private IServiceBus _serviceBus;
@@ -30,7 +30,7 @@ namespace EventStore.Infrastructure.Store
             SerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
         }
 
-        public GetEventStore(IStoreSettings eventStoreSettings, IServiceBus serviceBus)
+        public GetEventStore(IStoreSettings<IEventStoreConnection> eventStoreSettings, IServiceBus serviceBus)
         {
             _eventStoreSettings = eventStoreSettings;
             _serviceBus = serviceBus;

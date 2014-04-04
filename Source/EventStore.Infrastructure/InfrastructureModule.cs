@@ -5,6 +5,7 @@ using EventStore.Domain.Core;
 using EventStore.Infrastructure.DataAccess;
 using EventStore.Infrastructure.Events;
 using EventStore.Infrastructure.Store;
+using NEventStore;
 using Ninject.Modules;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,10 @@ namespace EventStore.Infrastructure
         public override void Load()
         {
             Bind<IRepositoryCache>().To<RepositoryCache>().InSingletonScope();
-            Bind<IStoreSettings>().To<StoreSettings>();
+            Bind<IStoreSettings<IEventStoreConnection>>().To<StoreSettings>();
+            Bind<IStoreSettings<IStoreEvents>>().To<NEventStoreSettings>();
             Bind<IServiceBus>().To<InProcessServiceBus>();
-            Bind<IEventStore>().To<GetEventStore>();
+            Bind<IEventStore>().To<EventStore.Infrastructure.Store.NEventStore>();
             Bind<IRepository>().To<StoreRepository>();
 
             RegisterHandlers();
