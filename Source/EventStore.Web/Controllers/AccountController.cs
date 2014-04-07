@@ -64,3 +64,22 @@ namespace EventStore.Web.Controllers
         }
     }
 }
+
+/*
+ * • Competence tree categories: 30
+• Competences: 100
+• Individuals count: 300 000
+• Average number of competences per individual: 10
+• Construction and Education companies: 1 000 
+• Application Providers count: 6
+• Amount of people coming to industry per month: 2 000 - 4 000
+• Amount of people changing the employee per month: 1 000
+Finland
+• Competence tree categories: 15
+• Competences: 50
+• Individuals count: 150 000
+• Average number of competences per individual: 10
+• Construction and Education companies: 500 
+• Application Providers count: 15
+• Amount of people coming to industry per month: 1 000 - 2 000
+• Amount of people changing the employee per month: 500*/

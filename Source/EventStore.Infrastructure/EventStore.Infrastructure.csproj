@@ -64,6 +64,7 @@
     <Compile Include="Events\InProcessServiceBus.cs" />
     <Compile Include="Events\IServiceBus.cs" />
     <Compile Include="InfrastructureModule.cs" />
+    <Compile Include="Misc\IdentityGenerator.cs" />
     <Compile Include="Ninject\NinjectResolver.cs" />
     <Compile Include="Ninject\NinjectScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

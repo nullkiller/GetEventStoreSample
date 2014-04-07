@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompetenceTree\CompetenceCreated.cs" />
+    <Compile Include="Employee\CompetenciesChanged.cs" />
+    <Compile Include="Employee\EmployeeCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserEvents\Created.cs" />
   </ItemGroup>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using EventStore.Infrastructure.Misc;
 
 namespace EventStore.Tests.Arrange
 {
@@ -17,7 +18,7 @@ namespace EventStore.Tests.Arrange
 
         public static Created ArrangeCreated(int number = 0)
         {
-            return new Created(TestLogins[number], TestPassword);
+            return new Created(TestLogins[number], TestPassword, new IdentityGenerator());
         }
 
         public static void AssertUserCreated(User user)

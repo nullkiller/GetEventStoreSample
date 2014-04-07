@@ -1,4 +1,5 @@
-﻿using EventStore.Domain.Core.CommonDomain.Core;
+﻿using EventStore.Domain.Core;
+using EventStore.Domain.Core.CommonDomain.Core;
 using EventStore.Messages.UserEvents;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace EventStore.Domain
 {
     public class User: AggregateBase
     {
-        private User(string login, string password)
+        private User(string login, string password, IIdentityGenerator identityGenerator)
         {
-            var @event = new Created(login, password);
+            var @event = new Created(login, password, identityGenerator);
             RaiseEvent(@event);
         }
 
@@ -37,9 +38,9 @@ namespace EventStore.Domain
 
         #region Domain Methods
 
-        public static User CreateUser(string login, string password)
+        public static User CreateUser(string login, string password, IIdentityGenerator identityGenerator)
         {
-            return new User(login, password);
+            return new User(login, password, identityGenerator);
         }
 
         public bool Validate(string password)

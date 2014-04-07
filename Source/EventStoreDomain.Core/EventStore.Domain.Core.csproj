@@ -48,6 +48,7 @@
     <Compile Include="HandlerForDomainEventNotFoundException.cs" />
     <Compile Include="IAggregate.cs" />
     <Compile Include="IEventstore.cs" />
+    <Compile Include="IIdentityGenerator.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IRouteEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -43,7 +43,8 @@ namespace EventStore.Infrastructure.Store
         public IStoreEvents GetConnection()
         {
             return Wireup.Init()
-                .UsingAsynchronousDispatchScheduler(new CommitDispatcher(ServiceBus))
+                .DoNotDispatchCommits()
+                //.UsingAsynchronousDispatchScheduler(new CommitDispatcher(ServiceBus))
                 .UsingSqlPersistence("EventStore")
                 .WithDialect(new MsSqlDialect())
                     .PageEvery(int.MaxValue)

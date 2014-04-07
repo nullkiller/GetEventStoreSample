@@ -48,6 +48,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventStore.Infrastructure.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventStore.Tests.Arrange", "EventStore.Tests.Arrange\EventStore.Tests.Arrange.csproj", "{E9723395-8CBD-4844-9B7F-E6B824928A88}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataGen", "DataGen", "{5E2E511C-5A7A-41A6-9386-532C927B3494}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventStore.GenerateData", "EventStore.GenerateData\EventStore.GenerateData.csproj", "{6835503D-B2A8-497C-A63C-E576C6D76104}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +98,10 @@ Global
 		{E9723395-8CBD-4844-9B7F-E6B824928A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9723395-8CBD-4844-9B7F-E6B824928A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9723395-8CBD-4844-9B7F-E6B824928A88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6835503D-B2A8-497C-A63C-E576C6D76104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6835503D-B2A8-497C-A63C-E576C6D76104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6835503D-B2A8-497C-A63C-E576C6D76104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6835503D-B2A8-497C-A63C-E576C6D76104}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,5 +117,6 @@ Global
 		{6EAE0058-BE1F-47E1-9F08-2E6E5F146027} = {3954D219-C764-46C3-980D-536BD19CDC26}
 		{846F8B52-826A-47B8-A990-ABC41A0C916E} = {FF2500BF-5A11-41C6-A87F-4338F4FC1332}
 		{29C3810D-9879-4943-907A-06B70A132D62} = {C0BB1B8F-86B1-4622-BC8B-BA9268547D89}
+		{6835503D-B2A8-497C-A63C-E576C6D76104} = {5E2E511C-5A7A-41A6-9386-532C927B3494}
 	EndGlobalSection
 EndGlobal

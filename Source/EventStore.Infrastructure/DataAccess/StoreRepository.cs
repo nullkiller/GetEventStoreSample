@@ -24,7 +24,9 @@ namespace EventStore.Infrastructure.DataAccess
         {
             factoryMethods = new Dictionary<Type, Func<IAggregate>>
             {
-                { typeof(EventStore.Messages.UserEvents.Created), () => new User() }
+                { typeof(EventStore.Messages.UserEvents.Created), () => new User() },
+                { typeof(EventStore.Messages.Employee.EmployeeCreated), () => new Employee() },
+                { typeof(EventStore.Messages.CompetenceTree.CompetenceCreated), () => new Competence() }
             };
         }
 
@@ -41,17 +43,39 @@ namespace EventStore.Infrastructure.DataAccess
                 
         void IEventHandler<DomainEvent>.Handle(DomainEvent @event)
         {
-            var aggregate = _cache.GetOrAdd(@event.AggregateId, factoryMethods[@event.GetType()]);
+            IAggregate aggregate;
+            Func<IAggregate> factory;
+
+            var isCreationEvent = factoryMethods.TryGetValue(@event.GetType(), out factory);
+
+            if (isCreationEvent)
+            {
+                aggregate = factory();
+            }
+            else
+            {
+                aggregate = _cache.Get(@event.AggregateId);
+            }
+
             aggregate.ApplyEvent(@event);
+
+            if (isCreationEvent)
+            {
+                _cache.Add(aggregate);
+            }
         }
 
         public void Save(IAggregate aggregate, Guid commitId)
         {
             var newEvents = aggregate.GetUncommittedEvents();
 
-            _eventStore.SaveEvents(aggregate, newEvents, commitId);
+            var isNew = factoryMethods.ContainsKey(newEvents.First().GetType());
+            if (isNew)
+            {
+                _cache.Add(aggregate);
+            }
 
-            _cache.GetOrAdd(aggregate.Id, () => aggregate);
+            _eventStore.SaveEvents(aggregate, newEvents, commitId);
             
             aggregate.ClearUncommittedEvents();
         }

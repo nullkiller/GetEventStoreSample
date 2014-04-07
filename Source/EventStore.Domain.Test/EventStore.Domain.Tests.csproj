@@ -58,6 +58,10 @@
       <Project>{624453e0-f3a8-4a02-a05e-1de54214f7e2}</Project>
       <Name>EventStore.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EventStore.Infrastructure\EventStore.Infrastructure.csproj">
+      <Project>{846f8b52-826a-47b8-a990-abc41a0c916e}</Project>
+      <Name>EventStore.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EventStore.Messages\EventStore.Messages.csproj">
       <Project>{03904c6c-b092-4ce7-90da-9526f3a01890}</Project>
       <Name>EventStore.Messages</Name>

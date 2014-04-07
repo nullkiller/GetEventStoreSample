@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using EventStore.Tests.Arrange;
+using EventStore.Infrastructure.Misc;
 
 namespace EventStore.Domain.Tests
 {
     public class UserTests
     {
-
         [Fact]
         public void user_shold_apply_to_create_event()
         {
@@ -27,7 +27,7 @@ namespace EventStore.Domain.Tests
         [Fact]
         public void user_should_be_creatable()
         {
-            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword);
+            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword, new IdentityGenerator());
 
             UserEvents.AssertUserCreated(user);
         }

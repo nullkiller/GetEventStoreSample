@@ -20,8 +20,9 @@ namespace EventStore.Web
 
     public class WebApiApplication : Ninject.Web.Common.NinjectHttpApplication
     {
-        [Inject]
         public IEventStore Store { get; set; }
+
+        public IRepositoryCache DataCache { get; set; }
 
         protected override void OnApplicationStarted()
         {
@@ -36,12 +37,16 @@ namespace EventStore.Web
 
             GlobalConfiguration.Configuration.DependencyResolver = Bootstrapper.Instance.DependencyResolver;
 
+            var sw = System.Diagnostics.Stopwatch.StartNew();
             Store.FetchAllEvents();
+            var elapsed = sw.Elapsed;
+            sw.Stop();
         }
 
         protected override global::Ninject.IKernel CreateKernel()
         {
             Store = Bootstrapper.Instance.Get<IEventStore>();
+            DataCache = Bootstrapper.Instance.Get<IRepositoryCache>();
 
             return Bootstrapper.Instance.Kernel;
         }

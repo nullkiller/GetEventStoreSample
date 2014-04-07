@@ -16,17 +16,16 @@ namespace EventStore.Infrastructure.DataAccess
             _all = new Dictionary<Guid, IAggregate>();
         }
 
-        public IAggregate GetOrAdd(Guid aggregateId, Func<IAggregate> aggregateFactory)
+        public void Add(IAggregate aggregate)
         {
-            IAggregate existingAggregate;
-
-            if (!_all.TryGetValue(aggregateId, out existingAggregate))
+            try
             {
-                existingAggregate = aggregateFactory();
-                _all.Add(aggregateId, existingAggregate);
+                _all.Add(aggregate.Id, aggregate);
             }
-
-            return existingAggregate;
+            catch (ArgumentException)
+            {
+                throw new AggregateVersionException(aggregate.Id, aggregate.GetType(), aggregate.Version, 0);
+            }
         }
 
         public void Reset()

@@ -14,9 +14,12 @@ namespace EventStore.Domain.CommandHandlers
         [Inject]
         public IRepository Repository { get; set; }
 
+        [Inject]
+        public IIdentityGenerator IdentityGenerator { get; set; }
+
         public void Execute(CreateNewUserCommand command)
         {
-            var user = User.CreateUser(command.Login, command.Password);
+            var user = User.CreateUser(command.Login, command.Password, IdentityGenerator);
             Repository.Save(user, Guid.NewGuid());
         }
     }

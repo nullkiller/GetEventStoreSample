@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
+using EventStore.Infrastructure.Misc;
 
 namespace EventStore.Infrastructure.Tests
 {
@@ -26,14 +27,17 @@ namespace EventStore.Infrastructure.Tests
             var users = repository.GetAll<User>();
             users.Should().BeEmpty();
 
-            var userCreated = UserEvents.ArrangeCreated();
-            eventHandler.Handle(userCreated);
+            for (var i = 0; i < 3; i++)
+            {
+                var userCreated = UserEvents.ArrangeCreated();
+                eventHandler.Handle(userCreated);
 
-            users = repository.GetAll<User>();
-            var user = users.FirstOrDefault();
+                users = repository.GetAll<User>();
+                var user = users.FirstOrDefault();
 
-            user.Should().NotBeNull();
-            UserEvents.AssertUserCreated(user);
+                user.Should().NotBeNull();
+                UserEvents.AssertUserCreated(user);
+            }
         }
 
         [Fact]
@@ -65,7 +69,7 @@ namespace EventStore.Infrastructure.Tests
             
             StoreRepository repository = new StoreRepository(eventStore, cache);
 
-            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword);
+            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword, new IdentityGenerator());
             repository.Save(user, Guid.NewGuid());
 
             cache.Get(user.Id).Should().Be(user);
@@ -75,6 +79,28 @@ namespace EventStore.Infrastructure.Tests
             
             userCreated.Should().NotBeNull();
             userCreated.Login.Should().Be(UserEvents.TestLogin);
+        }
+
+        [Fact]
+        public void repository_shouldnt_save_users_with_same_id()
+        {
+            var eventStore = Substitute.For<IEventStore>();
+            var identityGenerator = Substitute.For<IIdentityGenerator>();
+
+            var guid = Guid.NewGuid();
+            identityGenerator.NewId().Returns(i => guid);
+
+            var cache = new RepositoryCache();
+
+            StoreRepository repository = new StoreRepository(eventStore, cache);
+
+            var @event = UserEvents.ArrangeCreated();
+
+            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword, identityGenerator);
+            repository.Save(user, Guid.NewGuid());
+
+            user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword, identityGenerator);
+            repository.Invoking(i => i.Save(user, Guid.NewGuid())).ShouldThrow<AggregateVersionException>();
         }
     }
 }

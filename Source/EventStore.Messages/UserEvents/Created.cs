@@ -9,12 +9,16 @@ namespace EventStore.Messages.UserEvents
 {
     public class Created: DomainEvent
     {
-        public Created(string login, string password)
+        public Created()
+        {
+        }
+
+        public Created(string login, string password, IIdentityGenerator identityGenerator)
         {
             Login = login;
             Password = password;
 
-            AggregateId = Guid.NewGuid();
+            AggregateId = identityGenerator.NewId();
         }
         
         public string Password { get; set; }
@@ -22,7 +26,5 @@ namespace EventStore.Messages.UserEvents
         public string Login { get; set; }
 
         public Guid AggregateId { get; set; }
-
-        public int Version { get; set; }
     }
 }

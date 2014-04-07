@@ -11,7 +11,7 @@ namespace EventStore.Infrastructure.DataAccess
     {
         void Reset();
         IAggregate Get(Guid id);
-        IAggregate GetOrAdd(Guid id, Func<IAggregate> factory);
+        void Add(IAggregate aggregate);
         IEnumerable<IAggregate> GetAll();
     }
 }
