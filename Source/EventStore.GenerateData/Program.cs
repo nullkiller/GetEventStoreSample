@@ -23,7 +23,7 @@ namespace EventStore.GenerateData
 
             cometencies.ForEach(i => repository.Save(i, Guid.NewGuid()));
             
-            for (var z = 0; z < 100; z++)
+            for (var z = 0; z < 10; z++)
             {
                 var sw = System.Diagnostics.Stopwatch.StartNew();
 

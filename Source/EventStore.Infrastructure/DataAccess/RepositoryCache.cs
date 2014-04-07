@@ -1,5 +1,6 @@
 ﻿using EventStore.Domain.Core;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,20 +10,18 @@ namespace EventStore.Infrastructure.DataAccess
 {
     public class RepositoryCache: IRepositoryCache
     {
-        private Dictionary<Guid, IAggregate> _all;
+        private ConcurrentDictionary<Guid, IAggregate> _all;
 
         public RepositoryCache()
         {
-            _all = new Dictionary<Guid, IAggregate>();
+            _all = new ConcurrentDictionary<Guid, IAggregate>();
         }
 
         public void Add(IAggregate aggregate)
         {
-            try
-            {
-                _all.Add(aggregate.Id, aggregate);
-            }
-            catch (ArgumentException)
+            var result = _all.GetOrAdd(aggregate.Id, aggregate);
+            
+            if(!Object.ReferenceEquals(aggregate, result))
             {
                 throw new AggregateVersionException(aggregate.Id, aggregate.GetType(), aggregate.Version, 0);
             }
