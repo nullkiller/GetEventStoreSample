@@ -39,7 +39,7 @@ namespace EventStore.Infrastructure.Store
         {
             using (var store = _settings.GetConnection())
             {
-                using (var stream = store.OpenStream("main"))
+                using (var stream = store.CreateStream("main"))
                 {
 
                     var uncommitedEvents = aggregate.GetUncommittedEvents();
@@ -47,7 +47,7 @@ namespace EventStore.Infrastructure.Store
                     {
                         var eventMessage = new EventMessage
                         {
-                            Headers = new Dictionary<string, object> { { "Commit Id", commitId } },
+                            //Headers = new Dictionary<string, object> { { "Commit Id", commitId } },
                             Body = @event
                         };
 

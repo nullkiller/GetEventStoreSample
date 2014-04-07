@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace EventStore.Infrastructure.Store
 {
@@ -48,6 +49,7 @@ namespace EventStore.Infrastructure.Store
                 .UsingSqlPersistence("EventStore")
                 .WithDialect(new MsSqlDialect())
                     .PageEvery(int.MaxValue)
+                .EnlistInAmbientTransaction()
                 .Build();
         }
     }

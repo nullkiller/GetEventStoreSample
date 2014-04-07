@@ -22,26 +22,36 @@ namespace EventStore.GenerateData
             var cometencies = Enumerable.Range(1, 100).Select(i => Competence.Create("C" + i, identityGenerator)).ToList();
 
             cometencies.ForEach(i => repository.Save(i, Guid.NewGuid()));
-
-            for (var j = 0; j < 10000; j++)
+            
+            for (var z = 0; z < 100; z++)
             {
-                var employee = Employee.Create("E" + j, identityGenerator);
+                var sw = System.Diagnostics.Stopwatch.StartNew();
 
-                var set = Generate(cometencies, 4);
-                employee.AddCompetences(set);
+                Enumerable.Range(1, 100).AsParallel().WithDegreeOfParallelism(Environment.ProcessorCount * 2).ForAll(j =>
+                {
+                    var employee = Employee.Create("E" + j, identityGenerator);
 
-                repository.Save(employee, Guid.NewGuid());
+                    var set = Generate(cometencies, 4);
+                    employee.AddCompetences(set);
 
-                set = Generate(cometencies, 2);
-                employee.AddCompetences(set);
+                    repository.Save(employee, Guid.NewGuid());
 
-                repository.Save(employee, Guid.NewGuid());
+                    set = Generate(cometencies, 2);
+                    employee.AddCompetences(set);
 
-                set = Generate(cometencies, 4);
-                employee.AddCompetences(set);
+                    repository.Save(employee, Guid.NewGuid());
 
-                repository.Save(employee, Guid.NewGuid());
+                    set = Generate(cometencies, 4);
+                    employee.AddCompetences(set);
+
+                    repository.Save(employee, Guid.NewGuid());
+                });
+
+                var elpased = sw.Elapsed;
+                Console.WriteLine(z + " = " + elpased);
             }
+
+            Console.ReadLine();
         }
 
         private static IEnumerable<CompetenceDocument> Generate(List<Competence> cometencies, int p)
