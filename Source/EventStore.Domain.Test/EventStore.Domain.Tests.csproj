@@ -35,6 +35,9 @@
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.2.0.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,13 +50,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UserTests.cs" />
+    <Compile Include="Commands\UserCommandTests.cs" />
+    <Compile Include="Entities\CompetenceTreeTests.cs" />
+    <Compile Include="Entities\EmployeeTests.cs" />
+    <Compile Include="Entities\UserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EventStore.Commands\EventStore.Commands.csproj">
+      <Project>{f5d83841-9884-4d15-8eec-35554bfa471a}</Project>
+      <Name>EventStore.Commands</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EventStore.Domain\EventStore.Domain.csproj">
       <Project>{624453e0-f3a8-4a02-a05e-1de54214f7e2}</Project>
       <Name>EventStore.Domain</Name>

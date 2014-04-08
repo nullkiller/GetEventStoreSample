@@ -9,9 +9,9 @@ namespace EventStore.Messages.Employee
 {
     public class CompetenciesChanged: DomainEvent
     {
-        public CompetenciesChanged(Guid guid, List<CompetenceDocumentInfo> competenceInfo)
+        public CompetenciesChanged(Guid employeeId, IEnumerable<CompetenceDocumentInfo> competenceInfo)
         {
-            this.AggregateId = guid;
+            this.AggregateId = employeeId;
             this.Competencies = competenceInfo;
         }
 

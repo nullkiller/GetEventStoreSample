@@ -45,6 +45,7 @@
       <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -55,13 +56,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\AggregateDeletedException.cs" />
-    <Compile Include="DataAccess\AggregateNotFoundException.cs" />
-    <Compile Include="DataAccess\AggregateVersionException.cs" />
+    <Compile Include="DataAccess\AggregateFactory.cs" />
+    <Compile Include="DataAccess\Exceptions\AggregateDeletedException.cs" />
+    <Compile Include="DataAccess\Exceptions\AggregateNotFoundException.cs" />
+    <Compile Include="DataAccess\Exceptions\AggregateVersionException.cs" />
+    <Compile Include="DataAccess\IAggregateFactory.cs" />
+    <Compile Include="DataAccess\InitialAggregateBuilder.cs" />
     <Compile Include="DataAccess\IRepositoryCache.cs" />
     <Compile Include="DataAccess\RepositoryCache.cs" />
     <Compile Include="DataAccess\StoreRepository.cs" />
-    <Compile Include="DataAccess\StoreNotFoundException.cs" />
+    <Compile Include="DataAccess\Exceptions\StoreNotFoundException.cs" />
     <Compile Include="Events\InProcessServiceBus.cs" />
     <Compile Include="Events\IServiceBus.cs" />
     <Compile Include="InfrastructureModule.cs" />
@@ -70,6 +74,8 @@
     <Compile Include="Ninject\NinjectScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceBusModule.cs" />
+    <Compile Include="Store\ByggEventStore.cs" />
+    <Compile Include="Store\ByggStoreSettings.cs" />
     <Compile Include="Store\GetEventStore.cs" />
     <Compile Include="Store\IStoreSettings.cs" />
     <Compile Include="Store\NEventStore.cs" />

@@ -6,85 +6,81 @@ using System.Threading.Tasks;
 
 namespace EventStore.Domain.Core
 {
-    namespace CommonDomain.Core
+    public abstract class AggregateBase : IAggregate, IEquatable<IAggregate>
     {
-        using System;
-        using System.Collections;
-        using System.Collections.Generic;
+        private readonly ICollection<DomainEvent> uncommittedEvents = new LinkedList<DomainEvent>();
 
-        public abstract class AggregateBase : IAggregate, IEquatable<IAggregate>
+        private IRouteEvents registeredRoutes;
+
+        protected AggregateBase()
+            : this(null)
         {
-            private readonly ICollection<DomainEvent> uncommittedEvents = new LinkedList<DomainEvent>();
+        }
 
-            private IRouteEvents registeredRoutes;
+        protected AggregateBase(IRouteEvents handler)
+        {
+            if (handler == null) return;
 
-            protected AggregateBase()
-                : this(null)
-            {
-            }
+            this.RegisteredRoutes = handler;
+            this.RegisteredRoutes.Register(this);
+        }
 
-            protected AggregateBase(IRouteEvents handler)
-            {
-                if (handler == null) return;
+        public Guid Id { get; protected set; }
+        public int Version { get; protected set; }
 
-                this.RegisteredRoutes = handler;
-                this.RegisteredRoutes.Register(this);
+        protected IRouteEvents RegisteredRoutes
+        {
+            get
+            {
+                return registeredRoutes ?? (registeredRoutes = new ConventionEventRouter(true, this));
             }
+            set
+            {
+                if (value == null)
+                    throw new InvalidOperationException("AggregateBase must have an event router to function");
 
-            public Guid Id { get; protected set; }
-            public int Version { get; protected set; }
+                registeredRoutes = value;
+            }
+        }
 
-            protected IRouteEvents RegisteredRoutes
-            {
-                get
-                {
-                    return registeredRoutes ?? (registeredRoutes = new ConventionEventRouter(true, this));
-                }
-                set
-                {
-                    if (value == null)
-                        throw new InvalidOperationException("AggregateBase must have an event router to function");
+        protected void Register<T>(Action<T> route)
+        {
+            this.RegisteredRoutes.Register(route);
+        }
 
-                    registeredRoutes = value;
-                }
-            }
+        protected void RaiseEvent(DomainEvent @event)
+        {
+            ((IAggregate)this).ApplyEvent(@event);
+            this.uncommittedEvents.Add(@event);
+        }
 
-            protected void Register<T>(Action<T> route)
-            {
-                this.RegisteredRoutes.Register(route);
-            }
+        void IAggregate.ApplyEvent(DomainEvent @event)
+        {
+            this.RegisteredRoutes.Dispatch(@event);
+            this.Version++;
+        }
 
-            protected void RaiseEvent(DomainEvent @event)
-            {
-                ((IAggregate)this).ApplyEvent(@event);
-                this.uncommittedEvents.Add(@event);
-            }
-            void IAggregate.ApplyEvent(DomainEvent @event)
-            {
-                this.RegisteredRoutes.Dispatch(@event);
-                this.Version++;
-            }
-            ICollection<DomainEvent> IAggregate.GetUncommittedEvents()
-            {
-                return this.uncommittedEvents.ToList();
-            }
-            void IAggregate.ClearUncommittedEvents()
-            {
-                this.uncommittedEvents.Clear();
-            }        
+        ICollection<DomainEvent> IAggregate.GetUncommittedEvents()
+        {
+            return this.uncommittedEvents.ToList();
+        }
 
-            public override int GetHashCode()
-            {
-                return this.Id.GetHashCode();
-            }
-            public override bool Equals(object obj)
-            {
-                return this.Equals(obj as IAggregate);
-            }
-            public virtual bool Equals(IAggregate other)
-            {
-                return null != other && other.Id == this.Id;
-            }
+        void IAggregate.ClearUncommittedEvents()
+        {
+            this.uncommittedEvents.Clear();
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as IAggregate);
+        }
+        public virtual bool Equals(IAggregate other)
+        {
+            return null != other && other.Id == this.Id;
         }
     }
 }

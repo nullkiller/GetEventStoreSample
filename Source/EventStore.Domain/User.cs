@@ -1,5 +1,4 @@
 ﻿using EventStore.Domain.Core;
-using EventStore.Domain.Core.CommonDomain.Core;
 using EventStore.Messages.UserEvents;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EventStore.Domain
 {
-    public class User: AggregateBase
+    public class User: AggregateBase, IRouteEvent<Created>
     {
         private User(string login, string password, IIdentityGenerator identityGenerator)
         {
@@ -25,17 +24,6 @@ namespace EventStore.Domain
 
         public string Password { get; set; }
 
-        #region Event Listeners
-
-        public void Apply(Created @event)
-        {
-            this.Id = @event.AggregateId;
-            this.Login = @event.Login;
-            this.Password = @event.Password;
-        }
-
-        #endregion
-
         #region Domain Methods
 
         public static User CreateUser(string login, string password, IIdentityGenerator identityGenerator)
@@ -43,9 +31,20 @@ namespace EventStore.Domain
             return new User(login, password, identityGenerator);
         }
 
-        public bool Validate(string password)
+        public bool CheckPassword(string password)
         {
             return this.Password == password;
+        }
+
+        #endregion
+
+        #region Event Listeners
+
+        void IRouteEvent<Created>.Apply(Created @event)
+        {
+            this.Id = @event.AggregateId;
+            this.Login = @event.Login;
+            this.Password = @event.Password;
         }
 
         #endregion

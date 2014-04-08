@@ -17,68 +17,24 @@ namespace EventStore.Infrastructure.Tests
     public class StoreRepositoryTests
     {
         [Fact]
-        public void repository_should_handle_user_created_event()
-        {
-            var eventStore = Substitute.For<IEventStore>();
-            var cache = new RepositoryCache();
-            StoreRepository repository = new StoreRepository(eventStore, cache);
-            IEventHandler<DomainEvent> eventHandler = repository;
-
-            var users = repository.GetAll<User>();
-            users.Should().BeEmpty();
-
-            for (var i = 0; i < 3; i++)
-            {
-                var userCreated = UserEvents.ArrangeCreated();
-                eventHandler.Handle(userCreated);
-
-                users = repository.GetAll<User>();
-                var user = users.FirstOrDefault();
-
-                user.Should().NotBeNull();
-                UserEvents.AssertUserCreated(user);
-            }
-        }
-
-        [Fact]
-        public void repository_should_handle_two_users_created_event()
-        {
-            var eventStore = Substitute.For<IEventStore>();
-            var cache = new RepositoryCache();
-            StoreRepository repository = new StoreRepository(eventStore, cache);
-            IEventHandler<DomainEvent> eventHandler = repository;
-
-            var userCreated = UserEvents.ArrangeCreated();
-            var secondCreated = UserEvents.ArrangeCreated(2);
-
-            eventHandler.Handle(userCreated);
-            eventHandler.Handle(secondCreated);
-
-            var users = repository.GetAll<User>().ToList();
-            users.Count.Should().Be(2);
-
-            UserEvents.AssertUserCreated(users[0]);
-            users[0].Id.Should().NotBe(users[1].Id);
-        }
-
-        [Fact]
         public void repository_should_save_user()
         {
             var eventStore = Substitute.For<IEventStore>();
             var cache = new RepositoryCache();
             
-            StoreRepository repository = new StoreRepository(eventStore, cache);
+            StoreRepository repository = new StoreRepository(eventStore, cache, new AggregateFactory());
 
-            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword, new IdentityGenerator());
+            var user = User.CreateUser(FakeUser.TestLogin, FakeUser.TestPassword, new IdentityGenerator());
             repository.Save(user, Guid.NewGuid());
 
             cache.Get(user.Id).Should().Be(user);
+
             var saveEventsCall = eventStore.ReceivedCalls().First();
             var eventsToSave = saveEventsCall.GetArguments()[1].As<IEnumerable<DomainEvent>>();
             var userCreated = eventsToSave.First().As<EventStore.Messages.UserEvents.Created>();
             
             userCreated.Should().NotBeNull();
-            userCreated.Login.Should().Be(UserEvents.TestLogin);
+            userCreated.Login.Should().Be(FakeUser.TestLogin);
         }
 
         [Fact]
@@ -92,14 +48,14 @@ namespace EventStore.Infrastructure.Tests
 
             var cache = new RepositoryCache();
 
-            StoreRepository repository = new StoreRepository(eventStore, cache);
+            StoreRepository repository = new StoreRepository(eventStore, cache, new AggregateFactory());
 
-            var @event = UserEvents.ArrangeCreated();
+            var @event = FakeUser.ArrangeCreated();
 
-            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword, identityGenerator);
+            var user = User.CreateUser(FakeUser.TestLogin, FakeUser.TestPassword, identityGenerator);
             repository.Save(user, Guid.NewGuid());
 
-            user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword, identityGenerator);
+            user = User.CreateUser(FakeUser.TestLogin, FakeUser.TestPassword, identityGenerator);
             repository.Invoking(i => i.Save(user, Guid.NewGuid())).ShouldThrow<AggregateVersionException>();
         }
     }

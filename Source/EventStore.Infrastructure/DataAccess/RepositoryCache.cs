@@ -34,7 +34,14 @@ namespace EventStore.Infrastructure.DataAccess
 
         public IAggregate Get(Guid id)
         {
-            return _all[id];
+            IAggregate aggregate;
+
+            if (!_all.TryGetValue(id, out aggregate))
+            {
+                aggregate = null;
+            }
+
+            return aggregate;
         }
 
         public IEnumerable<IAggregate> GetAll()

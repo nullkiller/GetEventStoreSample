@@ -1,5 +1,4 @@
 ﻿using EventStore.ClientAPI;
-using EventStore.Domain;
 using EventStore.Domain.CommandHandlers;
 using EventStore.Domain.Core;
 using EventStore.Infrastructure.DataAccess;
@@ -7,13 +6,10 @@ using EventStore.Infrastructure.Events;
 using EventStore.Infrastructure.Misc;
 using EventStore.Infrastructure.Store;
 using NEventStore;
+using NEventStore.Serialization;
 using Ninject.Modules;
-using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EventStore.Infrastructure
 {
@@ -21,12 +17,15 @@ namespace EventStore.Infrastructure
     {
         public override void Load()
         {
+            Bind<ISerialize>().To<JsonSerializer>();
+            Bind<IAggregateFactory>().To<AggregateFactory>();
             Bind<IIdentityGenerator>().To<IdentityGenerator>().InSingletonScope();
             Bind<IRepositoryCache>().To<RepositoryCache>().InSingletonScope();
             Bind<IStoreSettings<IEventStoreConnection>>().To<StoreSettings>();
             Bind<IStoreSettings<IStoreEvents>>().To<NEventStoreSettings>();
+            Bind<IStoreSettings<IDbConnection>>().To<ByggStoreSettings>();
             Bind<IServiceBus>().To<InProcessServiceBus>();
-            Bind<IEventStore>().To<EventStore.Infrastructure.Store.NEventStore>();
+            Bind<IEventStore>().To<EventStore.Infrastructure.Store.ByggEventStore>();
             Bind<IRepository>().To<StoreRepository>();
 
             RegisterHandlers();

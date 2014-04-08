@@ -48,7 +48,7 @@ namespace EventStore.Web.Controllers
         {
             var user = DataRepository.GetAll<User>().FirstOrDefault(u => u.Login == model.Login);
 
-            if (user.Validate(model.Password))
+            if (user.CheckPassword(model.Password))
             {
                 FormsAuthentication.SetAuthCookie(user.Login, false);
                 Response.Redirect("/");

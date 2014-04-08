@@ -11,16 +11,19 @@ namespace EventStore.Domain.CommandHandlers
 {
     public class UserCommandHandler: CommandHandler<CreateNewUserCommand>
     {
-        [Inject]
-        public IRepository Repository { get; set; }
+        private IRepository _repository;
+        private IIdentityGenerator _identityGenerator;
 
-        [Inject]
-        public IIdentityGenerator IdentityGenerator { get; set; }
+        public UserCommandHandler(IRepository repository, IIdentityGenerator identityGenerator)
+        {
+            _repository = repository;
+            _identityGenerator = identityGenerator;
+        }
 
         public void Execute(CreateNewUserCommand command)
         {
-            var user = User.CreateUser(command.Login, command.Password, IdentityGenerator);
-            Repository.Save(user, Guid.NewGuid());
+            var user = User.CreateUser(command.Login, command.Password, _identityGenerator);
+            _repository.Save(user, Guid.NewGuid());
         }
     }
 }

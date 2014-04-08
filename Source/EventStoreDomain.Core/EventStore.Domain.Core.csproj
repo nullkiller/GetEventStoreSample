@@ -47,6 +47,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="HandlerForDomainEventNotFoundException.cs" />
     <Compile Include="IAggregate.cs" />
+    <Compile Include="IRouteEvent.cs" />
     <Compile Include="IEventstore.cs" />
     <Compile Include="IIdentityGenerator.cs" />
     <Compile Include="IRepository.cs" />

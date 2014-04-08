@@ -13,7 +13,7 @@ namespace EventStore.Infrastructure
     {
         public override void Load()
         {
-            Bind<IEventHandler<DomainEvent>>().To(typeof(StoreRepository));
+            Bind<IEventHandler<DomainEvent>>().To(typeof(InitialAggregateBuilder));
         }
     }
 }

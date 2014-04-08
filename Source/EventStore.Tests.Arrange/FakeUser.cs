@@ -10,7 +10,7 @@ using EventStore.Infrastructure.Misc;
 
 namespace EventStore.Tests.Arrange
 {
-    public class UserEvents
+    public class FakeUser
     {
         public const string TestLogin = "test";
         public static readonly string[] TestLogins = new string[] { TestLogin, TestLogin + 1, TestLogin + 2 };
@@ -26,6 +26,11 @@ namespace EventStore.Tests.Arrange
             user.Login.Should().Be(TestLogin);
             user.Password.Should().Be(TestPassword);
             user.Id.Should().NotBe(Guid.Empty);
+        }
+
+        public static EventStore.Commands.User.CreateNewUserCommand ArrangeCreatedCommand()
+        {
+            return new Commands.User.CreateNewUserCommand(TestLogin, TestPassword);
         }
     }
 }

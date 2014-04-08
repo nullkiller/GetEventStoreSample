@@ -8,6 +8,7 @@ using Xunit;
 using FluentAssertions;
 using EventStore.Tests.Arrange;
 using EventStore.Infrastructure.Misc;
+using EventStore.Domain.Core;
 
 namespace EventStore.Domain.Tests
 {
@@ -17,19 +18,19 @@ namespace EventStore.Domain.Tests
         public void user_shold_apply_to_create_event()
         {
             var user = new User();
-            var created = UserEvents.ArrangeCreated();
+            var created = FakeUser.ArrangeCreated();
 
-            user.Apply(created);
+            user.As<IRouteEvent<Created>>().Apply(created);
 
-            UserEvents.AssertUserCreated(user);
+            FakeUser.AssertUserCreated(user);
         }
 
         [Fact]
         public void user_should_be_creatable()
         {
-            var user = User.CreateUser(UserEvents.TestLogin, UserEvents.TestPassword, new IdentityGenerator());
+            var user = User.CreateUser(FakeUser.TestLogin, FakeUser.TestPassword, new IdentityGenerator());
 
-            UserEvents.AssertUserCreated(user);
+            FakeUser.AssertUserCreated(user);
         }
     }
 }

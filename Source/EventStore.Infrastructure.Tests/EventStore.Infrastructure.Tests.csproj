@@ -53,6 +53,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateFactoryTests.cs" />
+    <Compile Include="ByggEventStoreTests.cs" />
+    <Compile Include="CacheTests.cs" />
+    <Compile Include="IdentityTests.cs" />
+    <Compile Include="InitialAggregateBuilderTests.cs" />
     <Compile Include="StoreRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,5 +1,4 @@
 ﻿using EventStore.Domain.Core;
-using EventStore.Domain.Core.CommonDomain.Core;
 using EventStore.Messages.CompetenceTree;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EventStore.Domain
 {
-    public class Competence: AggregateBase
+    public class Competence: AggregateBase, IRouteEvent<CompetenceCreated>
     {
         public Competence()
         {
@@ -27,7 +26,7 @@ namespace EventStore.Domain
             return competence;
         }
 
-        public void Apply(CompetenceCreated @event)
+        void IRouteEvent<CompetenceCreated>.Apply(CompetenceCreated @event)
         {
             Id = @event.AggregateId;
             Name = @event.Name;
