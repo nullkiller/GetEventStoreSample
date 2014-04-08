@@ -18,7 +18,7 @@ namespace EventStore.Web.Controllers
     public class AccountController : Controller
     {
         [Inject]
-        public CommandHandler<CreateNewUserCommand> CreateNewUserHandler { get; set; }
+        public ICommandHandler<CreateNewUserCommand> CreateNewUserHandler { get; set; }
 
         [Inject]
         public IRepository DataRepository { get; set; }

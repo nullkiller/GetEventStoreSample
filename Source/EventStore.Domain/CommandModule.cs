@@ -1,4 +1,5 @@
 ﻿using EventStore.Domain.CommandHandlers;
+using EventStore.Domain.Core;
 using Ninject.Modules;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace EventStore.Domain
     {
         public override void Load()
         {
-            Bind<CommandHandler<EventStore.Commands.User.CreateNewUserCommand>>().To<UserCommandHandler>();
+            Bind<ICommandHandler<EventStore.Commands.User.CreateNewUserCommand>>().To<UserCommandHandler>();
         }
     }
 }

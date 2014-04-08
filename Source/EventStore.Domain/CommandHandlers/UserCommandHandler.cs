@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EventStore.Domain.CommandHandlers
 {
-    public class UserCommandHandler: CommandHandler<CreateNewUserCommand>
+    public class UserCommandHandler: ICommandHandler<CreateNewUserCommand>
     {
         private IRepository _repository;
         private IIdentityGenerator _identityGenerator;

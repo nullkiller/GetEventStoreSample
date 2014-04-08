@@ -33,10 +33,10 @@ namespace EventStore.Infrastructure
 
         public void RegisterHandlers()
         {
-            var handlers = typeof(CommandHandler<>)
+            var handlers = typeof(ICommandHandler<>)
                 .Assembly
                 .GetExportedTypes()
-                .GroupBy(x => x.GetInterfaces().SingleOrDefault(y => y.IsGenericType && y.GetGenericTypeDefinition() == typeof(CommandHandler<>)));
+                .GroupBy(x => x.GetInterfaces().SingleOrDefault(y => y.IsGenericType && y.GetGenericTypeDefinition() == typeof(ICommandHandler<>)));
 
             foreach (var pair in handlers.Where(h => h.Key != null))
             {

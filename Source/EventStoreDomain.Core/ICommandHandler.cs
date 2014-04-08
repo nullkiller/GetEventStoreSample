@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventStore.Domain.CommandHandlers
+namespace EventStore.Domain.Core
 {
-    public interface CommandHandler<T>
+    public interface ICommandHandler<T>
     {
         void Execute(T command);
     }
