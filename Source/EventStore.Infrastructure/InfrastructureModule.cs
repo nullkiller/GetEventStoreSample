@@ -5,7 +5,6 @@ using EventStore.Infrastructure.DataAccess;
 using EventStore.Infrastructure.Events;
 using EventStore.Infrastructure.Misc;
 using EventStore.Infrastructure.Store;
-using NEventStore;
 using NEventStore.Serialization;
 using Ninject.Modules;
 using System.Data;
@@ -24,14 +23,14 @@ namespace EventStore.Infrastructure
 
             Bind<ISerialize>().To<JsonSerializer>();
             Bind<IStoreSettings<IEventStoreConnection>>().To<StoreSettings>();
-            Bind<IStoreSettings<IStoreEvents>>().To<NEventStoreSettings>();
+            Bind<IStoreSettings<NEventStore.IStoreEvents>>().To<NEventStoreSettings>();
             Bind<ISnapshotStore>().To<FileSnapshotStore>();
-            Bind<IEventStore>().To<ByggEventStore>().InSingletonScope();
+            Bind<IEventStore>().To<EventStore.Infrastructure.Store.NEventStore>().InSingletonScope();
 
             Bind<IAggregateFactory>().To<AggregateFactory>();
             Bind<IIdentityGenerator>().To<IdentityGenerator>().InSingletonScope();
             Bind<IRepositoryCache, IProjection>().To<RepositoryCache>().InSingletonScope();
-            Bind<IStoreSettings<IDbConnection>>().To<ByggStoreSettings>();
+            Bind<IStoreSettings<IDbConnection>>().To<SimpleStoreSettings>();
             Bind<IRepository>().To<StoreRepository>();
 
             RegisterHandlers();

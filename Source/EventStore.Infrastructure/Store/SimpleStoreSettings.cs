@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace EventStore.Infrastructure.Store
 {
-    public class ByggStoreSettings : IStoreSettings<IDbConnection>
+    public class SimpleStoreSettings : IStoreSettings<IDbConnection>
     {
         [Inject]
         public IServiceBus ServiceBus { get; set; }
 
         public IDbConnection GetConnection()
         {
-            return new SqlConnection(ConfigurationManager.ConnectionStrings["EventStore"].ConnectionString);
+            return new SqlConnection(ConfigurationManager.ConnectionStrings["SimpleEventStore"].ConnectionString);
         }
     }
 }

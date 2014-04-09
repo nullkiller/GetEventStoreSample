@@ -12,7 +12,7 @@ using System.Data.SqlClient;
 
 namespace EventStore.Infrastructure.Store
 {
-    public class ByggEventStore: IEventStore
+    public class SimpleEventStore: IEventStore
     {
         private const long SnapshotSize = 1000;
 
@@ -24,7 +24,7 @@ namespace EventStore.Infrastructure.Store
         private long _snapshotVersion;
         private bool _loaded;
 
-        public ByggEventStore(IStoreSettings<IDbConnection> settings, IServiceBus serviceBus, ISerialize serializer, ISnapshotStore snapshotStore)
+        public SimpleEventStore(IStoreSettings<IDbConnection> settings, IServiceBus serviceBus, ISerialize serializer, ISnapshotStore snapshotStore)
         {
             _settings = settings;
             _serviceBus = serviceBus;
@@ -34,7 +34,7 @@ namespace EventStore.Infrastructure.Store
 
         public void FetchAllEvents()
         {
-            lock (typeof(ByggEventStore))
+            lock (typeof(SimpleEventStore))
             {
                 if (_loaded)
                 {
@@ -101,7 +101,7 @@ namespace EventStore.Infrastructure.Store
         {
             if (_lastId > _snapshotVersion + SnapshotSize)
             {
-                lock (typeof(ByggEventStore))
+                lock (typeof(SimpleEventStore))
                 {
                     if (_lastId > _snapshotVersion + SnapshotSize)
                     {

@@ -79,8 +79,8 @@
     <Compile Include="Ninject\NinjectScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceBusModule.cs" />
-    <Compile Include="Store\ByggEventStore.cs" />
-    <Compile Include="Store\ByggStoreSettings.cs" />
+    <Compile Include="Store\SimpleEventStore.cs" />
+    <Compile Include="Store\SimpleStoreSettings.cs" />
     <Compile Include="Store\FileSnapshotStore.cs" />
     <Compile Include="Store\GetEventStore.cs" />
     <Compile Include="Store\ISnapshotStore.cs" />

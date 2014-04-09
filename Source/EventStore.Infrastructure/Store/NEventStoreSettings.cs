@@ -46,7 +46,7 @@ namespace EventStore.Infrastructure.Store
             return Wireup.Init()
                 .DoNotDispatchCommits()
                 //.UsingAsynchronousDispatchScheduler(new CommitDispatcher(ServiceBus))
-                .UsingSqlPersistence("EventStore")
+                .UsingSqlPersistence("NEventStore")
                 .WithDialect(new MsSqlDialect())
                     .PageEvery(int.MaxValue)
                 .EnlistInAmbientTransaction()

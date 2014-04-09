@@ -32,7 +32,7 @@ namespace EventStore.Infrastructure.Tests
 
             settings.GetConnection().CreateCommand().ExecuteReader().Returns(data.CreateDataReader());
 
-            var store = new ByggEventStore(settings, testBus, serializer, snapshotStore);
+            var store = new SimpleEventStore(settings, testBus, serializer, snapshotStore);
             store.FetchAllEvents();
 
             testBus[0].Should().Be(@event);
@@ -51,7 +51,7 @@ namespace EventStore.Infrastructure.Tests
 
             settings.GetConnection().CreateCommand().ExecuteScalar().ReturnsForAnyArgs((decimal)1);
 
-            var store = new ByggEventStore(settings, testBus, serializer, snapshotStore);
+            var store = new SimpleEventStore(settings, testBus, serializer, snapshotStore);
             store.SaveEvents(null, events, Guid.NewGuid());
 
             testBus[0].Should().Be(@event);
@@ -73,7 +73,7 @@ namespace EventStore.Infrastructure.Tests
             snapshotStore.WhenForAnyArgs(s => s.SaveSnapshot(null)).Do(i => snapshotSaved = true);
             settings.GetConnection().CreateCommand().ExecuteScalar().ReturnsForAnyArgs((decimal)10000);
 
-            var store = new ByggEventStore(settings, testBus, serializer, snapshotStore);
+            var store = new SimpleEventStore(settings, testBus, serializer, snapshotStore);
             store.SaveEvents(null, events, Guid.NewGuid());
 
             snapshotSaved.Should().BeTrue();
