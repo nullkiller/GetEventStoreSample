@@ -49,7 +49,7 @@ namespace EventStore.Infrastructure.Store
             LoadRestEvents();
         }
 
-        public void SaveEvents(IAggregate aggregate, IEnumerable<DomainEvent> newEvents, Guid commitId)
+        public void SaveEvents(IEnumerable<DomainEvent> newEvents, Guid commitId)
         {
             PersistEvents(newEvents);
 

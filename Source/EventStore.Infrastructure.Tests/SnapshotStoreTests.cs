@@ -149,11 +149,7 @@ namespace EventStore.Infrastructure.Tests
 
         private static ProjectionData<IEnumerable<IAggregate>> ArrangeCacheData()
         {
-            var user = FakeUser.ArrangeUser();
-            var competence = FakeCompetence.ArrangeCompetence();
-            var employee = FakeEmployee.ArrangeEmployee(3);
-
-            var data = new ProjectionData<IEnumerable<IAggregate>> { Data = new IAggregate[] { user, competence, employee } };
+            var data = new ProjectionData<IEnumerable<IAggregate>> { Data = FakeDatabase.ArrangeAggregates()  };
             return data;
         }
 

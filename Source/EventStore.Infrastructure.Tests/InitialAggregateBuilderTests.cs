@@ -15,7 +15,7 @@ namespace EventStore.Infrastructure.Tests
     public class InitialAggregateBuilderTests
     {
         [Fact]
-        public void initial_buider_should_handle_creation_event()
+        public void initial_builder_should_handle_creation_event()
         {
             var cache = new RepositoryCache();
             IEventHandler<DomainEvent> eventHandler = new InitialAggregateBuilder(new AggregateFactory(), cache);
@@ -33,7 +33,7 @@ namespace EventStore.Infrastructure.Tests
         }
 
         [Fact]
-        public void initial_buider_should_handle_two_users_created_event()
+        public void initial_builder_should_handle_two_users_created_event()
         {
             var cache = new RepositoryCache();
             IEventHandler<DomainEvent> eventHandler = new InitialAggregateBuilder(new AggregateFactory(), cache);
@@ -52,7 +52,7 @@ namespace EventStore.Infrastructure.Tests
         }
 
         [Fact]
-        public void initial_buider_should_handle_change_event()
+        public void initial_builder_should_handle_change_event()
         {
             var cache = new RepositoryCache();
 
@@ -71,7 +71,7 @@ namespace EventStore.Infrastructure.Tests
         }
 
         [Fact]
-        public void initial_bilder_should_skip_uncommited_events()
+        public void initial_builder_should_skip_uncommited_events()
         {
             var employee = FakeEmployee.ArrangeEmployee(2);
             var newCompetences = FakeEmployee.ArrangeCompetencies(3);

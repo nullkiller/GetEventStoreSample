@@ -60,6 +60,7 @@
     <Compile Include="FakeDatabase.cs" />
     <Compile Include="FakeEmployee.cs" />
     <Compile Include="InMemoryFileManager.cs" />
+    <Compile Include="TestBootstrapper.cs" />
     <Compile Include="TestRepository.cs" />
     <Compile Include="TestServiceBus.cs" />
     <Compile Include="FakeUser.cs" />
@@ -85,6 +86,10 @@
     <ProjectReference Include="..\EventStore.ReadModel\EventStore.ReadModel.csproj">
       <Project>{6eae0058-be1f-47e1-9f08-2e6e5f146027}</Project>
       <Name>EventStore.ReadModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventStore.Web\EventStore.Web.csproj">
+      <Project>{29c3810d-9879-4943-907a-06b70a132d62}</Project>
+      <Name>EventStore.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\EventStoreDomain.Core\EventStore.Domain.Core.csproj">
       <Project>{06aafbfe-0671-4c95-b01e-c92b80aba439}</Project>

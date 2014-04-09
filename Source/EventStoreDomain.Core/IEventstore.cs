@@ -10,6 +10,6 @@ namespace EventStore.Domain.Core
     {
         void FetchAllEvents();
 
-        void SaveEvents(IAggregate aggregate, IEnumerable<DomainEvent> newEvents, Guid commitId);
+        void SaveEvents(IEnumerable<DomainEvent> newEvents, Guid commitId);
     }
 }

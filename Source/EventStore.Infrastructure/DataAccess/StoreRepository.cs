@@ -41,7 +41,7 @@ namespace EventStore.Infrastructure.DataAccess
                 _cache.Add(aggregate);
             }
 
-            _eventStore.SaveEvents(aggregate, newEvents, commitId);
+            _eventStore.SaveEvents(newEvents, commitId);
             
             aggregate.ClearUncommittedEvents();
         }

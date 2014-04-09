@@ -16,7 +16,7 @@ using System.Data.Common;
 
 namespace EventStore.Infrastructure.Tests
 {
-    public class ByggEventStoreTests
+    public class SimpleEventStoreTests
     {
         [Fact]
         public void event_store_should_load_events()
@@ -52,7 +52,7 @@ namespace EventStore.Infrastructure.Tests
             settings.GetConnection().CreateCommand().ExecuteScalar().ReturnsForAnyArgs((decimal)1);
 
             var store = new SimpleEventStore(settings, testBus, serializer, snapshotStore);
-            store.SaveEvents(null, events, Guid.NewGuid());
+            store.SaveEvents(events, Guid.NewGuid());
 
             testBus[0].Should().Be(@event);
         }
@@ -74,9 +74,33 @@ namespace EventStore.Infrastructure.Tests
             settings.GetConnection().CreateCommand().ExecuteScalar().ReturnsForAnyArgs((decimal)10000);
 
             var store = new SimpleEventStore(settings, testBus, serializer, snapshotStore);
-            store.SaveEvents(null, events, Guid.NewGuid());
+            store.SaveEvents(events, Guid.NewGuid());
 
             snapshotSaved.Should().BeTrue();
+        }
+
+        [Fact]
+        public void event_store_should_load_shapshot()
+        {
+            var data = FakeDatabase.ArrangeCommitsTable(1);
+            var settings = FakeDatabase.ArrangeSettings();
+            var testBus = new TestServiceBus();
+
+            var @event = FakeUser.ArrangeCreated();
+            var events = new List<DomainEvent> { @event };
+            var serializer = FakeDatabase.ArrangeSerializer(events);
+            var snapshotStore = FakeDatabase.ArrangeSnapshotStore();
+
+            var snapshotLoaded = false;
+            snapshotStore.WhenForAnyArgs(i => i.LoadSnapshot()).Do(i => snapshotLoaded = true);
+
+            settings.GetConnection().CreateCommand().ExecuteReader().Returns(data.CreateDataReader());
+
+            var store = new SimpleEventStore(settings, testBus, serializer, snapshotStore);
+            store.FetchAllEvents();
+
+            testBus[0].Should().Be(@event);
+            snapshotLoaded.Should().BeTrue();
         }
     }
 }

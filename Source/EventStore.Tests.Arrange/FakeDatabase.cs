@@ -1,4 +1,6 @@
-﻿using EventStore.Infrastructure.Store;
+﻿using EventStore.Domain.Core;
+using EventStore.Infrastructure.Store;
+using NEventStore;
 using NEventStore.Serialization;
 using NSubstitute;
 using System;
@@ -48,6 +50,28 @@ namespace EventStore.Tests.Arrange
             store.LoadSnapshot().Returns(new SnapshotVersion());
 
             return store;
+        }
+
+        public static IStoreSettings<NEventStore.IStoreEvents> ArrangeNSettings(IEventStream stream)
+        {
+            var settings = Substitute.For<IStoreSettings<IStoreEvents>>();
+            settings.GetConnection().OpenStream(null, null, 0, 0).ReturnsForAnyArgs(stream);
+
+            return settings;
+        }
+
+        public static IAggregate[] ArrangeAggregates()
+        {
+            var user = FakeUser.ArrangeUser();
+            var competence = FakeCompetence.ArrangeCompetence();
+            var employee = FakeEmployee.ArrangeEmployee(3);
+            var Data = new IAggregate[] { user, competence, employee };
+            return Data;
+        }
+
+        internal static IStoreSettings<IStoreEvents> ArrangeNSettings()
+        {
+            return ArrangeNSettings(Substitute.For<IEventStream>());
         }
     }
 }

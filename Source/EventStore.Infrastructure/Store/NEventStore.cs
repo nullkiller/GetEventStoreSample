@@ -34,12 +34,11 @@ namespace EventStore.Infrastructure.Store
             }
         }
 
-        public void SaveEvents(IAggregate aggregate, IEnumerable<DomainEvent> newEvents, Guid commitId)
+        public void SaveEvents(IEnumerable<DomainEvent> newEvents, Guid commitId)
         {
             lock (typeof(NEventStore))
             {
-                var uncommitedEvents = aggregate.GetUncommittedEvents();
-                foreach (var @event in uncommitedEvents)
+                foreach (var @event in newEvents)
                 {
                     var eventMessage = new EventMessage
                     {

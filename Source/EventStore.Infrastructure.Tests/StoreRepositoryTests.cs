@@ -21,16 +21,17 @@ namespace EventStore.Infrastructure.Tests
         {
             var eventStore = Substitute.For<IEventStore>();
             var cache = new RepositoryCache();
-            
+
             StoreRepository repository = new StoreRepository(eventStore, cache, new AggregateFactory());
+
+            IEnumerable<DomainEvent> eventsToSave = null;
+            eventStore.WhenForAnyArgs(i => i.SaveEvents(null, Guid.Empty)).Do(i => eventsToSave = i.Arg<IEnumerable<DomainEvent>>());  
 
             var user = User.CreateUser(FakeUser.TestLogin, FakeUser.TestPassword, new IdentityGenerator());
             repository.Save(user, Guid.NewGuid());
 
-            cache.Get(user.Id).Should().Be(user);
+            cache.Get(user.Id).Should().Be(user);    
 
-            var saveEventsCall = eventStore.ReceivedCalls().First();
-            var eventsToSave = saveEventsCall.GetArguments()[1].As<IEnumerable<DomainEvent>>();
             var userCreated = eventsToSave.First().As<EventStore.Messages.UserEvents.Created>();
             
             userCreated.Should().NotBeNull();

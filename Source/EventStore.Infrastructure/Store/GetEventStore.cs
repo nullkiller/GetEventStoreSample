@@ -79,12 +79,11 @@ namespace EventStore.Infrastructure.Store
             }
         }
 
-        public void SaveEvents(IAggregate aggregate, IEnumerable<DomainEvent> newEvents, Guid commitId)
+        public void SaveEvents(IEnumerable<DomainEvent> newEvents, Guid commitId)
         {
             var commitHeaders = new Dictionary<string, object>
             {
-                {CommitIdHeader, commitId},
-                {AggregateClrTypeHeader, aggregate.GetType().AssemblyQualifiedName}
+                {CommitIdHeader, commitId}
             };
 
             var streamName = "main";
