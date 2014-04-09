@@ -57,25 +57,88 @@ namespace EventStore.Infrastructure.Tests
         [Fact]
         public void snapshot_store_should_handle_no_snapshots()
         {
-            throw new NotImplementedException();
+            var kernel = ArrangeKernel();
+
+            var fileManager = new InMemoryFileManager();
+            var snapshotStore = new FileSnapshotStore(kernel, fileManager); 
+
+            var loadedVersion = snapshotStore.LoadSnapshot();
+
+            loadedVersion.LastEventId.Should().Be(SnapshotVersion.NoSnapshot);
         }
 
         [Fact]
         public void snapshot_store_should_skip_invalid_file_names()
         {
-            throw new NotImplementedException();
+            var kernel = ArrangeKernel();
+
+            var fileManager = new InMemoryFileManager();
+            var snapshotStore = new FileSnapshotStore(kernel, fileManager);
+
+            fileManager.FileName = @"App_Data\snapshots\test.bin";
+
+            var loadedVersion = snapshotStore.LoadSnapshot();
+
+            loadedVersion.LastEventId.Should().Be(SnapshotVersion.NoSnapshot);
         }
 
         [Fact]
         public void snapshot_store_should_skip_invalid_file_format()
         {
-            throw new NotImplementedException();
+            var kernel = ArrangeKernel();
+
+            var fileManager = new InMemoryFileManager();
+            var snapshotStore = new FileSnapshotStore(kernel, fileManager);
+
+            fileManager.FileName = @"App_Data\snapshots\snapshot1.json";
+
+            var loadedVersion = snapshotStore.LoadSnapshot();
+
+            loadedVersion.LastEventId.Should().Be(SnapshotVersion.NoSnapshot);
         }
 
         [Fact]
         public void snapshot_store_should_skip_snapshot_with_not_all_data()
         {
-            throw new NotImplementedException();
+            var kernel = Substitute.For<IKernel>();
+
+            var cacheData = ArrangeCacheData();
+            var projection1 = ArrangeProjection("entities", cacheData);
+
+            var viewData = ArrangeViewData();
+            var projection2 = ArrangeProjection("users", viewData);
+
+            var list = new List<IProjection>(){ projection1 };
+
+            kernel.GetAll(typeof(IProjection)).ReturnsForAnyArgs(list);
+            var data = kernel.GetAll(typeof(IProjection));
+
+            var fileManager = new InMemoryFileManager();
+            var snapshotStore = new FileSnapshotStore(kernel, fileManager);
+
+            var version = new SnapshotVersion(5);
+            snapshotStore.SaveSnapshot(version);
+
+            list.Add(projection2);
+
+            var loadedVersion = snapshotStore.LoadSnapshot();
+
+            loadedVersion.LastEventId.Should().Be(SnapshotVersion.NoSnapshot);
+        }
+
+        private IKernel ArrangeKernel()
+        {
+            var kernel = Substitute.For<IKernel>();
+
+            var cacheData = ArrangeCacheData();
+            var projection1 = ArrangeProjection("entities", cacheData);
+
+            var viewData = ArrangeViewData();
+            var projection2 = ArrangeProjection("users", viewData);
+
+            kernel.GetAll(typeof(IProjection)).ReturnsForAnyArgs(new IProjection[] { projection1, projection2 });
+            var data = kernel.GetAll(typeof(IProjection));
+            return kernel;
         }
 
         private ProjectionData<IEnumerable<UserDto>> ArrangeViewData()

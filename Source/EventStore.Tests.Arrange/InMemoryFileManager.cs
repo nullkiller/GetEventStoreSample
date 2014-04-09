@@ -36,7 +36,14 @@ namespace EventStore.Tests.Arrange
 
         public string[] GetFiles(string directory)
         {
-            return new string[] { Path.Combine(directory, "snapshot0.json"), FileName };
+            if (FileName == null)
+            {
+                return new string[0];
+            }
+            else
+            {
+                return new string[] { Path.Combine(directory, "snapshot0.json"), FileName };
+            }
         }
     }
 }

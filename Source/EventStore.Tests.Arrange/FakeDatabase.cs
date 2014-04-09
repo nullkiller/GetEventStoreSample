@@ -15,6 +15,7 @@ namespace EventStore.Tests.Arrange
         public static IStoreSettings<IDbConnection> ArrangeSettings()
         {
             var settings = Substitute.For<IStoreSettings<IDbConnection>>();
+
             return settings;
         }
 
@@ -39,18 +40,6 @@ namespace EventStore.Tests.Arrange
             }
 
             return table;
-        }
-
-        public static IDbConnection ArrangeConnection()
-        {
-            var connection = Substitute.For<IDbConnection>();
-            var command = Substitute.For<IDbCommand>();
-            var parameters = Substitute.For<IDataParameterCollection>();
-
-            connection.CreateCommand().Returns(command);
-            command.Parameters.Returns(parameters);
-
-            return connection;
         }
 
         public static ISnapshotStore ArrangeSnapshotStore()

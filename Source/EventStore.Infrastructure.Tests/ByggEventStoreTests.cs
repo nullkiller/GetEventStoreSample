@@ -49,10 +49,34 @@ namespace EventStore.Infrastructure.Tests
             var serializer = FakeDatabase.ArrangeSerializer(events);
             var snapshotStore = FakeDatabase.ArrangeSnapshotStore();
 
+            settings.GetConnection().CreateCommand().ExecuteScalar().ReturnsForAnyArgs((decimal)1);
+
             var store = new ByggEventStore(settings, testBus, serializer, snapshotStore);
             store.SaveEvents(null, events, Guid.NewGuid());
 
             testBus[0].Should().Be(@event);
+        }
+
+        [Fact]
+        public void event_store_should_save_snapshot()
+        {
+            var settings = FakeDatabase.ArrangeSettings();
+            var testBus = new TestServiceBus();
+
+            var @event = FakeUser.ArrangeCreated();
+            var events = new List<DomainEvent> { @event };
+            var serializer = FakeDatabase.ArrangeSerializer(events);
+            var snapshotStore = FakeDatabase.ArrangeSnapshotStore();
+
+            var snapshotSaved = false;
+
+            snapshotStore.WhenForAnyArgs(s => s.SaveSnapshot(null)).Do(i => snapshotSaved = true);
+            settings.GetConnection().CreateCommand().ExecuteScalar().ReturnsForAnyArgs((decimal)10000);
+
+            var store = new ByggEventStore(settings, testBus, serializer, snapshotStore);
+            store.SaveEvents(null, events, Guid.NewGuid());
+
+            snapshotSaved.Should().BeTrue();
         }
     }
 }

@@ -29,13 +29,12 @@ namespace EventStore.Infrastructure.Store
 
             var files = _fileManager.GetFiles(@"~\App_Data\snapshots");
 
-            var lastSnapshot = files.OrderBy(i => GetSnapshotNumber(i)).LastOrDefault();
+            var lastSnapshot = files.Select(i => GetSnapshotNumber(i)).OrderBy(i => i).LastOrDefault();
             var newVersion = new SnapshotVersion();
 
-            if (lastSnapshot != null)
+            if (lastSnapshot > SnapshotVersion.NoSnapshot)
             {
-                var snapshotNumber = GetSnapshotNumber(lastSnapshot);
-                newVersion = new SnapshotVersion { LastEventId = snapshotNumber };
+                newVersion = new SnapshotVersion { LastEventId = lastSnapshot };
 
                 var serializer = new Newtonsoft.Json.JsonSerializer
                 {
@@ -46,12 +45,27 @@ namespace EventStore.Infrastructure.Store
 
                 var projections = _kernel.GetAll(typeof(IProjection)).OfType<IProjection>().ToDictionary(i => i.Name);
 
-                using (var stream = _fileManager.OpenFile(lastSnapshot))
+                using (var stream = _fileManager.OpenFile(@"~\App_Data\snapshots\snapshot" + lastSnapshot + ".json"))
                 {
-                    var dataSet = (IEnumerable<ProjectionData>)serializer.Deserialize(stream, typeof(IEnumerable<ProjectionData>));
-                    foreach (var data in dataSet)
+                    try
                     {
-                        projections[data.Name].Data = data;
+                        var dataSet = (IEnumerable<ProjectionData>)serializer.Deserialize(stream, typeof(IEnumerable<ProjectionData>));
+
+                        if (dataSet != null && dataSet.Count() == projections.Count)
+                        {
+                            foreach (var data in dataSet)
+                            {
+                                projections[data.Name].Data = data;
+                            }
+                        }
+                        else
+                        {
+                            newVersion = new SnapshotVersion();
+                        }
+                    }
+                    catch
+                    {
+                        newVersion = new SnapshotVersion();
                     }
                 }
             }
@@ -59,14 +73,20 @@ namespace EventStore.Infrastructure.Store
             return newVersion;
         }
 
-        private static int GetSnapshotNumber(string fileName)
+        private static long GetSnapshotNumber(string fileName)
         {
             fileName = Path.GetFileName(fileName);
 
             var start ="snapshot".Length;
             var length = fileName.IndexOf('.') - start;
+            long version = SnapshotVersion.NoSnapshot;
 
-            return Int32.Parse(fileName.Substring(start, length));
+            if (!fileName.EndsWith(".json") || !Int64.TryParse(fileName.Substring(start, length), out version))
+            {
+                version = SnapshotVersion.NoSnapshot;
+            }
+
+            return version;
         }
 
         public void SaveSnapshot(SnapshotVersion version)
