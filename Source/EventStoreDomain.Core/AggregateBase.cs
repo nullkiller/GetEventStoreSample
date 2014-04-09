@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +26,10 @@ namespace EventStore.Domain.Core
             this.RegisteredRoutes.Register(this);
         }
 
+        [JsonProperty]
         public Guid Id { get; protected set; }
+
+        [JsonProperty]
         public int Version { get; protected set; }
 
         protected IRouteEvents RegisteredRoutes

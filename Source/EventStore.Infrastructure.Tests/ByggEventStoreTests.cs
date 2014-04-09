@@ -24,6 +24,7 @@ namespace EventStore.Infrastructure.Tests
             var data = FakeDatabase.ArrangeCommitsTable(1);
             var settings = FakeDatabase.ArrangeSettings();
             var testBus = new TestServiceBus();
+            var snapshotStore = FakeDatabase.ArrangeSnapshotStore();
 
             var @event = FakeUser.ArrangeCreated();
             var events = new List<DomainEvent> { @event };
@@ -31,7 +32,7 @@ namespace EventStore.Infrastructure.Tests
 
             settings.GetConnection().CreateCommand().ExecuteReader().Returns(data.CreateDataReader());
 
-            var store = new ByggEventStore(settings, testBus, serializer);
+            var store = new ByggEventStore(settings, testBus, serializer, snapshotStore);
             store.FetchAllEvents();
 
             testBus[0].Should().Be(@event);
@@ -46,8 +47,9 @@ namespace EventStore.Infrastructure.Tests
             var @event = FakeUser.ArrangeCreated();
             var events = new List<DomainEvent> { @event };
             var serializer = FakeDatabase.ArrangeSerializer(events);
+            var snapshotStore = FakeDatabase.ArrangeSnapshotStore();
 
-            var store = new ByggEventStore(settings, testBus, serializer);
+            var store = new ByggEventStore(settings, testBus, serializer, snapshotStore);
             store.SaveEvents(null, events, Guid.NewGuid());
 
             testBus[0].Should().Be(@event);

@@ -32,5 +32,15 @@ namespace EventStore.Tests.Arrange
         {
             return new Commands.User.CreateNewUserCommand(TestLogin, TestPassword);
         }
+
+        public static EventStore.ReadModel.UserDto ArrangeUserDto(int number = 0)
+        {
+            return new ReadModel.UserDto { Login = TestLogins[number], Password = TestPassword, AggregateRootId = Guid.NewGuid() };
+        }
+
+        public static User ArrangeUser()
+        {
+            return User.CreateUser(TestLogin, TestPassword, new IdentityGenerator());
+        }
     }
 }

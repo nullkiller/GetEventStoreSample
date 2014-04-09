@@ -52,5 +52,13 @@ namespace EventStore.Tests.Arrange
 
             return connection;
         }
+
+        public static ISnapshotStore ArrangeSnapshotStore()
+        {
+            var store = Substitute.For<ISnapshotStore>();
+            store.LoadSnapshot().Returns(new SnapshotVersion());
+
+            return store;
+        }
     }
 }

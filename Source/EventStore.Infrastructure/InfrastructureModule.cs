@@ -17,15 +17,21 @@ namespace EventStore.Infrastructure
     {
         public override void Load()
         {
+            Bind<IFormsAuthentication>().To<FormsAuthenticationWrapper>();
+            Bind<IFileManager>().To<FileManager>();
+
+            Bind<IServiceBus>().To<InProcessServiceBus>();
+
             Bind<ISerialize>().To<JsonSerializer>();
-            Bind<IAggregateFactory>().To<AggregateFactory>();
-            Bind<IIdentityGenerator>().To<IdentityGenerator>().InSingletonScope();
-            Bind<IRepositoryCache>().To<RepositoryCache>().InSingletonScope();
             Bind<IStoreSettings<IEventStoreConnection>>().To<StoreSettings>();
             Bind<IStoreSettings<IStoreEvents>>().To<NEventStoreSettings>();
+            Bind<ISnapshotStore>().To<FileSnapshotStore>();
+            Bind<IEventStore>().To<ByggEventStore>().InSingletonScope();
+
+            Bind<IAggregateFactory>().To<AggregateFactory>();
+            Bind<IIdentityGenerator>().To<IdentityGenerator>().InSingletonScope();
+            Bind<IRepositoryCache, IProjection>().To<RepositoryCache>().InSingletonScope();
             Bind<IStoreSettings<IDbConnection>>().To<ByggStoreSettings>();
-            Bind<IServiceBus>().To<InProcessServiceBus>();
-            Bind<IEventStore>().To<EventStore.Infrastructure.Store.ByggEventStore>();
             Bind<IRepository>().To<StoreRepository>();
 
             RegisterHandlers();

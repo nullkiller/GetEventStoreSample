@@ -1,6 +1,7 @@
 ﻿using EventStore.Domain;
 using EventStore.Infrastructure;
 using EventStore.Infrastructure.Ninject;
+using EventStore.ReadModel;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace EventStore.Web.Ioc
 
         private void CreateKernel()
         {
-            Kernel = new StandardKernel(new InfrastructureModule(), new ServiceBusModule(), new CommandModule());
+            Kernel = new StandardKernel(new InfrastructureModule(), new ServiceBusModule(), new CommandModule(), new ProjectionsModule());
         }
 
         public T Get<T>()

@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace EventStore.Infrastructure.DataAccess
 {
-    public class RepositoryCache: IRepositoryCache
+    public class RepositoryCache: IRepositoryCache, IProjection
     {
+        private const string CacheKey = "entities";
+
         private ConcurrentDictionary<Guid, IAggregate> _all;
 
         public RepositoryCache()
@@ -47,6 +49,28 @@ namespace EventStore.Infrastructure.DataAccess
         public IEnumerable<IAggregate> GetAll()
         {
             return _all.Values;
+        }
+
+        ProjectionData IProjection.Data
+        {
+            get
+            {
+                var data = _all.Values;
+                return new ProjectionData<IEnumerable<IAggregate>> { Data = data, Name = CacheKey };
+            }
+            set
+            {
+                var data = (ProjectionData<IEnumerable<IAggregate>>)value;
+                _all = new ConcurrentDictionary<Guid, IAggregate>(data.Data.ToDictionary(i => i.Id));
+            }
+        }
+
+        string IProjection.Name
+        {
+            get
+            {
+                return CacheKey;
+            }
         }
     }
 }

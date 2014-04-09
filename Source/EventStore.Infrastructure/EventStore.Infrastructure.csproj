@@ -48,6 +48,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -69,14 +70,20 @@
     <Compile Include="Events\InProcessServiceBus.cs" />
     <Compile Include="Events\IServiceBus.cs" />
     <Compile Include="InfrastructureModule.cs" />
+    <Compile Include="Misc\FileManager.cs" />
+    <Compile Include="Misc\FormsAuthentication.cs" />
     <Compile Include="Misc\IdentityGenerator.cs" />
+    <Compile Include="Misc\IFileManager.cs" />
+    <Compile Include="Misc\IFormsAuthentication.cs" />
     <Compile Include="Ninject\NinjectResolver.cs" />
     <Compile Include="Ninject\NinjectScope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceBusModule.cs" />
     <Compile Include="Store\ByggEventStore.cs" />
     <Compile Include="Store\ByggStoreSettings.cs" />
+    <Compile Include="Store\FileSnapshotStore.cs" />
     <Compile Include="Store\GetEventStore.cs" />
+    <Compile Include="Store\ISnapshotStore.cs" />
     <Compile Include="Store\IStoreSettings.cs" />
     <Compile Include="Store\NEventStore.cs" />
     <Compile Include="Store\NEventStoreSettings.cs" />

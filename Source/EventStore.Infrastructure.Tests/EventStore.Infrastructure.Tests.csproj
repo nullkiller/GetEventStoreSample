@@ -38,6 +38,10 @@
     <Reference Include="NEventStore">
       <HintPath>..\packages\NEventStore.5.0.1.2\lib\net40\NEventStore.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
     </Reference>
@@ -58,6 +62,7 @@
     <Compile Include="CacheTests.cs" />
     <Compile Include="IdentityTests.cs" />
     <Compile Include="InitialAggregateBuilderTests.cs" />
+    <Compile Include="SnapshotStoreTests.cs" />
     <Compile Include="StoreRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -77,6 +82,10 @@
     <ProjectReference Include="..\EventStore.Messages\EventStore.Messages.csproj">
       <Project>{03904c6c-b092-4ce7-90da-9526f3a01890}</Project>
       <Name>EventStore.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventStore.ReadModel\EventStore.ReadModel.csproj">
+      <Project>{6eae0058-be1f-47e1-9f08-2e6e5f146027}</Project>
+      <Name>EventStore.ReadModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\EventStore.Tests.Arrange\EventStore.Tests.Arrange.csproj">
       <Project>{e9723395-8cbd-4844-9b7f-e6b824928a88}</Project>

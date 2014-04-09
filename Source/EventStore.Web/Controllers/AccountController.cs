@@ -3,15 +3,16 @@ using EventStore.Domain;
 using EventStore.Domain.CommandHandlers;
 using EventStore.Domain.Core;
 using EventStore.Infrastructure.DataAccess;
+using EventStore.Infrastructure.Misc;
 using EventStore.Messages.UserEvents;
 using EventStore.ReadModel;
+using EventStore.ReadModel.Users;
 using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace EventStore.Web.Controllers
 {
@@ -22,6 +23,12 @@ namespace EventStore.Web.Controllers
 
         [Inject]
         public IRepository DataRepository { get; set; }
+
+        [Inject]
+        public IUsersView UsersByLogin { get; set; }
+
+        [Inject]
+        public IFormsAuthentication FormsAuthentication { get; set; }
 
         public ActionResult Create()
         {
@@ -35,7 +42,7 @@ namespace EventStore.Web.Controllers
 
             CreateNewUserHandler.Execute(createCommand);
 
-            return View(user);
+            return Redirect("/account/login");
         }
 
         public ActionResult Login()
@@ -46,15 +53,21 @@ namespace EventStore.Web.Controllers
         [HttpPost]
         public ActionResult Login(UserDto model)
         {
-            var user = DataRepository.GetAll<User>().FirstOrDefault(u => u.Login == model.Login);
-
-            if (user.CheckPassword(model.Password))
+            var userId = UsersByLogin.GetUserId(model.Login);
+            if (userId != null)
             {
-                FormsAuthentication.SetAuthCookie(user.Login, false);
-                Response.Redirect("/");
+                var user = DataRepository.GetById<User>(userId.Value);
+
+                if (user.CheckPassword(model.Password))
+                {
+                    FormsAuthentication.SetAuthentication(user.Login, false);
+                    return Redirect("/");
+                }
             }
 
-            return View(user);
+            this.ModelState.AddModelError("Invalid login or password", "Check your login and password spelling");
+
+            return View(model);
         }
 
         public void Logout()
